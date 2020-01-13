@@ -19,6 +19,12 @@ namespace ProducerConsumer.Wpf
         public MainWindow()
         {
             InitializeComponent();
+            Task.LogTask += MainWindow_LogTask;
+        }
+
+        private void MainWindow_LogTask(object sender, string e)
+        {
+            AddLineToTextBox(e);
         }
 
 
@@ -34,10 +40,10 @@ namespace ProducerConsumer.Wpf
             _queue=new Queue<Task>();
             int min = Convert.ToInt32(TextBoxProducerMinimum.Text);
             int max = Convert.ToInt32(TextBoxProducerMaximum.Text);
-            //_producer = new Producer(min, max, LogTask, _queue);
+            _producer = new Producer(min, max, _queue);
             min = Convert.ToInt32(TextBoxConsumerMinimum.Text);
             max = Convert.ToInt32(TextBoxConsumerMaximum.Text);
-            //_consumer = new Consumer(min, max, _queue);
+            _consumer = new Consumer(min, max, _queue);
             CheckBoxIsRunning.IsChecked = true;
         }
 
@@ -57,6 +63,14 @@ namespace ProducerConsumer.Wpf
 
         private void CheckBoxIsRunning_Click(object sender, RoutedEventArgs e)
         {
+            if(CheckBoxIsRunning.IsChecked.Value == true)
+            {
+                FastClock.Instance.IsRunning = true;
+            }
+            else
+            {
+                FastClock.Instance.IsRunning = false;
+            }
         }
     }
 }
